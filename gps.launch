@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="port" default="/dev/ttyUSB0"/>
+    <arg name="baud" default="19200"/>
+    <arg name="use_rmc" default="True"/>
+    <arg name="odom_topic" default="/odom/gps"/>
+
+    <node pkg="nmea_navsat_driver" type="nmea_topic_serial_reader" name="nmea_topic_serial_reader">
+        <param name="port" value="$(arg port)"/>
+        <param name="baud" value="$(arg baud)"/>
+    </node>
+
+    <node pkg="nmea_navsat_driver" type="nmea_topic_driver" name="nmea_topic_driver">
+        <param name="useRMC" value="$(arg use_rmc)" />
+    </node>
+
+    <node pkg="gps_common" type="utm_odometry_node" name="utm_odometry_node">
+        <remap from="/odom" to="$(arg odom_topic)"/>
+    </node>
+
+</launch>
