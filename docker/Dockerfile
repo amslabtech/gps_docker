@@ -1,4 +1,4 @@
-FROM ros:kinetic-ros-base
+FROM ros:melodic-ros-base
 
 RUN apt-get update
 
@@ -7,9 +7,9 @@ WORKDIR /root
 
 RUN /bin/bash -c "mkdir -p catkin_ws/src"
 
-RUN cd catkin_ws/src && /bin/bash -c "source /opt/ros/kinetic/setup.bash; catkin_init_workspace"
+RUN cd catkin_ws/src && /bin/bash -c "source /opt/ros/melodic/setup.bash; catkin_init_workspace"
 
-RUN cd catkin_ws && /bin/bash -c "source /opt/ros/kinetic/setup.bash; catkin_make"
+RUN cd catkin_ws && /bin/bash -c "source /opt/ros/melodic/setup.bash; catkin_make"
 
 RUN cd /root && echo source /root/catkin_ws/devel/setup.bash >> .bashrc
 
@@ -19,11 +19,24 @@ ENV ROS_WORKSPACE=/root/catkin_ws
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y\
-                       ros-kinetic-tf* \
-                       ros-kinetic-nmea-comms \
-                       ros-kinetic-nmea-msgs \
-                       ros-kinetic-nmea-navsat-driver \
-                       ros-kinetic-gps-* \
+                       ros-melodic-tf* \
+                       ros-melodic-nmea-comms \
+                       ros-melodic-nmea-msgs \
+                       ros-melodic-gps-* \
+                       ros-melodic-roslint-* \
+					   python-pip \
     && rm -rf /var/lib/apt/lists/*
 
+WORKDIR /root/catkin_ws/src
+
+RUN git clone https://github.com/ros-drivers/nmea_navsat_driver
+
 WORKDIR /root
+
+RUN cd catkin_ws && /bin/bash -c "source /opt/ros/melodic/setup.bash; catkin_make"
+
+RUN pip install pyserial
+
+COPY ./ros_entrypoint.sh /
+
+CMD ["/ros_entrypoint.sh"]
