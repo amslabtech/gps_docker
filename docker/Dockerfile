@@ -24,7 +24,7 @@ RUN apt-get update && \
                        ros-melodic-nmea-msgs \
                        ros-melodic-gps-* \
                        ros-melodic-roslint-* \
-					   python-pip \
+                       python-pip \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /root/catkin_ws/src

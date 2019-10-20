@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <launch>
-	<arg name="port" default="/dev/gps"/>
+    <arg name="port" default="/dev/gps"/>
     <arg name="baud" default="36800"/>
     <arg name="use_rmc" default="False"/>
     <arg name="odom_topic" default="/odom/gps"/>
